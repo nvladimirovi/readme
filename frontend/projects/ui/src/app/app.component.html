@@ -1,0 +1,129 @@
+<mat-toolbar color="primary">
+  <span>READ.ME</span>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <mat-slide-toggle [checked]="darkModeOn" (change)="darkModeChange($event)"><mat-icon>dark_mode</mat-icon></mat-slide-toggle>
+</mat-toolbar>
+
+<div class="sidenav-container">
+  <mat-sidenav-container>
+    <mat-sidenav class="side-nav" mode="side" [opened]="openToc" #drawer>
+      <div *ngIf="searchEnabled" class="search-box">
+        <mat-toolbar>Search</mat-toolbar>
+        <mat-form-field class="search-input">
+          <mat-label>Search</mat-label>
+          <input matInput (input)="search($event)">
+        </mat-form-field>
+        <div *ngIf="searchResults.length > 0">
+          <div class="search-results">
+            <h3>Search Results:</h3>
+  
+            <div *ngFor="let result of searchResults">
+              <!-- Render search results as HTML elements -->
+              <!-- Example: -->
+              <p class="search-p" (click)="goToCfi(result.cfi)">{{ result.excerpt }}</p>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="searchResults.length === 0 && searchQuery">
+          <p>No results found.</p>
+        </div>
+      </div>
+  
+      <mat-nav-list>
+        <ng-container *ngTemplateOutlet="recursiveNav; context:{ $implicit: chapters }"></ng-container>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="controls">
+        <div class="content-controls">
+          <button type="button" mat-fab [color]="drawer.opened ? 'primary' : 'basic'" (click)="openToc = !openToc">
+            <mat-icon>short_text</mat-icon>
+          </button>
+  
+          <button type="button" mat-fab [color]="searchEnabled ? 'primary' : 'basic'" (click)="toggleSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+  
+          <button (click)="selectFile()" mat-fab [color]="rendition ? 'primary' : 'basic'">
+            <mat-icon>menu_book</mat-icon>
+          </button>
+        
+          <button (click)="play()" mat-fab [color]="playing ? 'primary' : 'basic'">
+            <mat-icon>play_circle_filled</mat-icon>
+          </button>
+          
+          <button (click)="pause()" mat-fab [color]="playing ? 'basic' : 'primary'">
+            <mat-icon>pause_circle_outline</mat-icon>
+          </button>
+        
+          <mat-form-field appearance="fill">
+            <mat-label>Chapter</mat-label>
+            <mat-select [value]="selectedChapterHref" (valueChange)="selectedChapterChange($event)">
+              <ng-container *ngFor="let chapter of chapters">
+                <mat-option *ngIf="!chapter?.subitems?.length" [value]="chapter.href">{{ chapter.label }}</mat-option>
+      
+                <mat-optgroup *ngIf="chapter?.subitems?.length" [label]="chapter.label">
+                  <ng-container *ngTemplateOutlet="recursiveOptgroup; context:{ $implicit: chapter.subitems }"></ng-container>
+                </mat-optgroup>
+      
+                <ng-template #recursiveOptgroup let-subitems>
+                  <ng-container *ngFor="let subitem of subitems">
+                    <ng-container *ngIf="subitem.subitems.length">
+                      <mat-optgroup [label]="subitem.label">
+                        <ng-container *ngTemplateOutlet="recursiveOptgroup; context:{ $implicit: subitem.subitems }"></ng-container>
+                      </mat-optgroup>
+                    </ng-container>
+                    <mat-option *ngIf="!subitem.subitems.length" [value]="subitem.href">{{ subitem.label }}</mat-option>
+                  </ng-container>
+                </ng-template>
+      
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+      
+          <button (click)="decreaseFontSize()" mat-icon-button color="accent">
+            <mat-icon>text_fields</mat-icon>
+          </button>
+          <button (click)="increaseFontSize()" mat-icon-button color="warn">
+            <mat-icon>format_size</mat-icon>
+          </button>
+        </div>
+      
+        <div class="reading-speed">
+          <mat-icon>speed</mat-icon>
+          <mat-slider
+              [max]="2"
+              [min]="0.25"
+              [step]="0.1"
+              [thumbLabel]="true"
+              [(ngModel)]="playbackRate">
+          </mat-slider>
+          <label>{{playbackRate}}</label>
+        </div>
+      </div>
+      
+      <div id="viewer" class="spreads"></div>
+
+      <div class="next-prev" [ngStyle]="{'visibility': rendition ? 'visible' : 'hidden'}">
+        <button mat-button color="accent" id="prev" href="#prev" class="arrow">Previous</button>
+        <p>Use arrow keys</p>
+        <button mat-button color="primary" id="next" href="#next" class="arrow">Next</button>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  
+  <ng-template #recursiveNav let-chapters>
+    <ng-container *ngFor="let chapter of chapters">
+      <mat-list-item *ngIf="!chapter.subitems.length" [attr.value]="chapter.href" (click)="selectedChapterChange(chapter.href)">
+        {{ chapter.label }}
+      </mat-list-item>
+      <mat-nav-list *ngIf="chapter.subitems.length" style="padding-left: 20px">
+        <mat-list-item [attr.value]="chapter.href" (click)="selectedChapterChange(chapter.href)">{{ chapter.label }}</mat-list-item>
+        <ng-container *ngTemplateOutlet="recursiveNav; context:{ $implicit: chapter.subitems }"></ng-container>
+      </mat-nav-list>
+    </ng-container>
+  </ng-template>
+</div>
