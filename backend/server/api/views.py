@@ -118,7 +118,7 @@ def tts_process(lock, queue, text, out_path):
         already_processing.append(text)
     
     # Define the duration in minutes
-    KILL_AFTER_DURATION_MINUTES = 0.5 * 60
+    KILL_AFTER_DURATION_MINUTES = 1 * 60
 
     # Get the start time
     start_time = time.time()
