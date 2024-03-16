@@ -49,7 +49,10 @@ python -m venv ./.venv
 ./.venv/Scripts/Activate.ps1
 # For Unix
 source ./.venv/bin/activate
+pip install -r requirements.txt
 
+# (Optional)
+# If you want to create your own implementation
 cp tts_template.py tts.py
 # Install your TTS model dependencies
 # Place your TTS model implementation in inference mode in tts.py
