@@ -13,6 +13,14 @@ README is a project designed to facilitate the creation of audiobooks using stat
 ## Demo
 https://github.com/nvladimirovi/readme/assets/29869465/65dededc-8fbd-48ef-9f44-758e2c615b14
 
+## Download
+- Download `Windows EXE 64bit CUDA 12.1` and unzip it
+
+### How to run it
+1. If you run README for 1st time run `./tts.exe` to download the TTS model, once the model is downloaded kill the process
+2. Run `./manage.exe runserver --noreload` to start README
+3. Open your browser
+
 ## Getting Started
 Requirements:
 - Python 3.10.11
@@ -98,6 +106,35 @@ sudo apt install ffmpeg
 python ./backend/server/manage.py runserver
 # Open http://127.0.0.1:8000/
 ```
+
+### Build Executable
+Make sure PyInstaller is installed in the `root` of the project and in the `tts` folder.
+
+1. Open `backend\server\api\views.py` and replace `tts.py` process with `tts.exe`.
+2. Rename `manage.spec.pyinstaller` and `tts.spec.pyinstaller` to `manage.spec` and `tts.spec`.
+3. To build the README server run:
+```bash
+# Activate virtual env
+# For windows
+./.venv/Scripts/Activate.ps1
+# For Unix
+source ./.venv/bin/activate
+
+pyinstaller ./manage.spec
+```
+4. To build the TTS model
+```bash
+# Activate virtual env
+# For windows
+./tts/.venv/Scripts/Activate.ps1
+# For Unix
+source ./tts/.venv/bin/activate
+
+pyinstaller ./tts.spec
+```
+5. Done!
+
+The end result should be dist folder in the root with `manage.exe` and `tts.exe`.
 
 ## License
 README is licensed under the MIT License, allowing for flexibility in use and distribution.
