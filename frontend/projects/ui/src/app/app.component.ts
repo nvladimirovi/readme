@@ -653,7 +653,7 @@ export class AppComponent {
 		const originalInnerHTML = el.innerHTML;
 		let originalText = el.innerText;
 
-		const useCustomHighlight = true;
+		const useCustomHighlight = false;
 		const synth = window.speechSynthesis;
 		if (useCustomHighlight || !synth) {
 			this.cutomHighlightSpokenWords(el, originalText, originalInnerHTML, highlight).then((subject) => {
@@ -666,7 +666,10 @@ export class AppComponent {
 				el.innerHTML = highlight(originalText, charIndex, charIndex + charLength);
 			});
 			this.browserTTSUtterance.addEventListener('end', (event) => {
-				event.elapsedTime
+				el.innerHTML = originalInnerHTML;
+			});
+
+			this.browserTTSUtterance.addEventListener('error', (event) => {
 				el.innerHTML = originalInnerHTML;
 			});
 			this.browserTTSUtterance.volume = 0;
