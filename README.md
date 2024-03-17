@@ -51,6 +51,15 @@ python -m venv ./.venv
 ./.venv/Scripts/Activate.ps1
 # For Unix
 source ./.venv/bin/activate
+
+pip install -r requirements.txt
+
+# If the above fail
+# Install pytorch
+# See https://pytorch.org/get-started/locally/
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# And then run again
 pip install -r requirements.txt
 
 # (Optional)
