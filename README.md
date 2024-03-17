@@ -1,6 +1,7 @@
 # README: Text-to-Speech Audiobook Generator
 ## Overview
 README is a project designed to facilitate the creation of audiobooks using state-of-the-art Text-to-Speech (TTS) models. With README, users can convert written text into high-quality audio narrations, allowing for the easy production of audiobooks across various genres and languages.
+![readme_overview](https://github.com/nvladimirovi/readme/assets/29869465/9da91956-8b61-40e9-a870-24a95ec421dd)
 
 ## Features
 - Text-to-Speech Conversion: README utilizes advanced TTS models to convert written text into natural-sounding audio.
