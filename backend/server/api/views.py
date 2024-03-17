@@ -188,11 +188,11 @@ class TTSViewSet(viewsets.ModelViewSet):
         # Clean text
         text = text.replace("\n", "")
         
-        mp3_path = voiceCacheDirPath(bookFileName, text) + ".mp3"
+        wav_path = voiceCacheDirPath(bookFileName, text) + ".wav"
         
-        if os.path.exists(mp3_path) is True:
-            soundBinary = open(mp3_path, "rb")
-            return FileResponse(soundBinary, content_type="audio/mpeg")
+        if os.path.exists(wav_path) is True:
+            soundBinary = open(wav_path, "rb")
+            return FileResponse(soundBinary, content_type="audio/wav")
         
         out_path = voiceCacheDirPath(bookFileName, text) + ".wav"
         voice_path = tts(text, out_path)
@@ -201,12 +201,12 @@ class TTSViewSet(viewsets.ModelViewSet):
         # For some reason I wasn't able to start audio using JS MediaSource with wav format
         # it works with MP3. If I load the wav file directly in UI like regular audio (nothing dynamic) it works...
         # Maybe I have to check with what codec TTS generate the wav files and use it.
-        sound = AudioSegment.from_wav(voice_path)
-        new_voice_path = voice_path.replace(".wav", ".mp3")
-        sound.export(new_voice_path, format="mp3")
+        # sound = AudioSegment.from_wav(voice_path)
+        # new_voice_path = voice_path.replace(".wav", ".mp3")
+        # sound.export(new_voice_path, format="mp3")
         
-        soundBinary = open(new_voice_path, "rb")
-        return FileResponse(soundBinary, content_type="audio/mpeg")
+        soundBinary = open(voice_path, "rb")
+        return FileResponse(soundBinary, content_type="audio/wav")
 
 def tts(text: str, out_path: str) -> str:
     global thread_running_event

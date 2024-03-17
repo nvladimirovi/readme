@@ -332,8 +332,8 @@ export class AppComponent {
 		const voice = this.http.post("/api/tts", { bookFileName: this.fileName, text: el.innerText }, { responseType: "arraybuffer" }).pipe(
 			mergeMap((voice) => {
 				// TODO: Use wav files?
-				// return from(this.loadAndPlayWav(voice));
-				return from(this.constructVoiceAudio(voice));
+				return from(this.loadAndPlayWav(voice));
+				// return from(this.constructVoiceAudio(voice));
 			}),
 			map(() => {
 				localStorage.setItem("playbackRate", this.playbackRate.toString());
