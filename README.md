@@ -52,7 +52,8 @@ python -m venv ./.venv
 # For Unix
 source ./.venv/bin/activate
 
-pip install -r requirements.txt
+pip install -r requirements.txt # For Windows
+pip install -r requirements-mac.txt # For Mac
 
 # If the above fail
 # Install pytorch
