@@ -181,6 +181,11 @@ export class AppComponent {
 	selectedChapterChange(selectedChapter: string) {
 		this.selectedChapterHref = selectedChapter;
 		this.rendition.display(selectedChapter);
+		/**
+		 * Workaround a bug where when navigating between chapters
+		 * the prev/next navigation renders wrong page.
+		 */
+		document.body.click();
 	}
 
 	setFontSize() {
@@ -271,7 +276,11 @@ export class AppComponent {
 
 	goToCfi(cfi: string) {
 		this.rendition.display(cfi);
-		this.rendition.display(cfi);
+		/**
+		 * Workaround a bug where when navigating between chapters
+		 * the prev/next navigation renders wrong page.
+		 */
+		document.body.click();
 	}
 
 	toggleSearch() {
@@ -506,6 +515,12 @@ export class AppComponent {
 			if ((e.keyCode || e.which) == 39) {
 				this.rendition.next();
 			}
+
+			/**
+			 * Workaround a bug where when navigating between chapters
+			 * the prev/next navigation renders wrong page.
+			 */
+			document.body.click();
 		};
 
 		this.rendition.on("keyup", keyListener);
